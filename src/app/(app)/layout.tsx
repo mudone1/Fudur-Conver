@@ -2,13 +2,14 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import type { WorkspaceRole } from "@/types/database";
 import type { WorkspaceSummary } from "@/types/workspace";
 
-/**
- * Protected app shell. Middleware already redirects unauthenticated
- * requests, but we re-check here as a second line of defense —
- * server components should never assume middleware ran.
- */
+interface WorkspaceMembershipRow {
+  role: WorkspaceRole;
+  workspaces: { id: string; name: string; slug: string } | null;
+}
+
 export default async function AppLayout({
   children,
 }: {
@@ -27,15 +28,16 @@ export default async function AppLayout({
     .from("workspace_members")
     .select("role, workspaces:workspace_id(id, name, slug)")
     .eq("user_id", user.id)
-    .limit(1);
+    .limit(1)
+    .returns<WorkspaceMembershipRow[]>();
 
   const first = memberships?.[0];
   const workspace: WorkspaceSummary | null =
     first && first.workspaces
       ? {
-          id: (first.workspaces as any).id,
-          name: (first.workspaces as any).name,
-          slug: (first.workspaces as any).slug,
+          id: first.workspaces.id,
+          name: first.workspaces.name,
+          slug: first.workspaces.slug,
           role: first.role,
         }
       : null;

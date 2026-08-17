@@ -1,12 +1,9 @@
-/**
- * Hand-written stub matching the Phase 1 schema below. Once Supabase
- * is provisioned, replace this with generated types:
- *   pnpm supabase gen types typescript --project-id <id> > src/types/database.ts
- * Keep it in sync with /supabase/migrations.
- */
 export type WorkspaceRole = "owner" | "admin" | "member";
 
 export interface Database {
+  __InternalSupabase: {
+    PostgrestVersion: "13";
+  };
   public: {
     Tables: {
       profiles: {
@@ -23,6 +20,7 @@ export interface Database {
           user_id: string;
         };
         Update: Partial<Database["public"]["Tables"]["profiles"]["Row"]>;
+        Relationships: [];
       };
       workspaces: {
         Row: {
@@ -40,6 +38,7 @@ export interface Database {
           owner_id: string;
         };
         Update: Partial<Database["public"]["Tables"]["workspaces"]["Row"]>;
+        Relationships: [];
       };
       workspace_members: {
         Row: {
@@ -55,7 +54,21 @@ export interface Database {
           role: WorkspaceRole;
         };
         Update: Partial<Database["public"]["Tables"]["workspace_members"]["Row"]>;
+        Relationships: [
+          {
+            foreignKeyName: "workspace_members_workspace_id_fkey";
+            columns: ["workspace_id"];
+            referencedRelation: "workspaces";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: {
+      workspace_role: WorkspaceRole;
+    };
+    CompositeTypes: Record<string, never>;
   };
 }
