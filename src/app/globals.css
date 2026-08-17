@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Premium, restrained theme tokens. Monochrome foundation with a single
+  primary accent drawn from the Fudur Conver mark's green, plus a
+  secondary "brand-orange" reserved for small logo-adjacent accents
+  (icon marks, highlights) — not for general UI chrome. Light is the
+  default; .dark overrides via the class strategy (see hooks/use-theme.ts).
+*/
+:root {
+  --canvas: #faf9f7;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e7e4df;
+  --ink: #1b1a17;
+  --ink-muted: #6b6862;
+  --accent: #2f8f4e;
+  --accent-ink: #ffffff;
+  --brand-orange: #e8792e;
+  --danger: #b3432b;
+  --success: #2f8f4e;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+.dark {
+  --canvas: #121210;
+  --surface: #191815;
+  --surface-raised: #201f1c;
+  --border: #2d2b27;
+  --ink: #f2f0ec;
+  --ink-muted: #a3a099;
+  --accent: #5fd17f;
+  --accent-ink: #06210f;
+  --brand-orange: #f0964f;
+  --danger: #e08064;
+  --success: #5fd17f;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+}
