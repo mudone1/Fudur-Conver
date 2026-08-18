@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { signInSchema } from "@/types/auth";
 import { AuthCard } from "@/components/auth/auth-card";
 
 export default function SignInPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +37,12 @@ export default function SignInPage() {
       return;
     }
 
-    router.push(searchParams.get("next") ?? "/dashboard");
+    const next =
+      typeof window !== "undefined"
+        ? new URL(window.location.href).searchParams.get("next")
+        : null;
+
+    router.push(next ?? "/dashboard");
   }
 
   return (
